@@ -1,0 +1,14 @@
+- load:
+   - /opt/var/md_source
+- select
+- store:
+     directory: /tmp/
+- finalize:
+     cacheDuration: PT4H
+     validUntil: P10D
+     ID: OurFederationSignedMetadata_
+- sign:
+    key: /opt/etc/pki/metadata_key.pem
+    cert: /opt/etc/pki/metadata_crt.pem
+- publish: /opt/var/metadata.xml
+
