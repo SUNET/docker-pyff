@@ -10,5 +10,5 @@
 - sign:
     key: /opt/etc/pki/metadata_key.pem
     cert: /opt/etc/pki/metadata_crt.pem
-- publish: /opt/var/metadata.xml
+- publish: /opt/var/md_feed/metadata.xml
 
