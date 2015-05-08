@@ -1,16 +1,19 @@
-# --------------------------------------------
-# install docker-pyff/pyff_batch on CentOS 6.x
-# --------------------------------------------
+### --------------------------------------------
+### install docker-pyff/pyff_batch on CentOS 6.x
+### --------------------------------------------
 
+#### install docker
 yum -y install docker-io
 chkconfig --add docker
 service docker start
 
+#### build pyff_batch docker image
 cd /usr/local/src   # location to keep git upstream link to produces updated images
 git clone https://github.com/rhoerbe/docker-pyff.git
 cd docker-pyff/pyff_batch
 ./docker_build.sh
 
+#### configure pyff_batch
 mkdir /opt/pyff_batch  # location with local configuration, not to be overwritten by git pull
 cp -pr docker_run.sh image_name.sh opt /opt/pyff_batch # copy startup & default config
 cd /opt/pyff_batch
@@ -26,7 +29,7 @@ ln -s opt/var/log/pyff.log /var/log/pyff_batch
 # edit finalize/ID in md.fd
 ln -z /var/log/pyff_batch opt/var/log
 
-# deploy pyff_batch as a centos service
-# create pyff_batch start script in /etc/init.d
+##### deploy pyff_batch as a centos service
+cp pyff_batch /etc/init.ds
 chkconfig --add pyff_batch
 service pyff_batch start
