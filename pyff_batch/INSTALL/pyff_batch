@@ -1,2 +1,56 @@
-TODO: service startup script for /etc/init.d
+#!/bin/bash
+#
+# gunicorn/peer        Startup script for the gunicorn server with the peer application
+# chkconfig: 345 84 16
+# description: seafile server
+#
+### BEGIN INIT INFO
+# Provides: gunicorn/peer
+# Required-Start: $local_fs $remote_fs $network $named
+# Required-Stop: $local_fs $remote_fs $network
+# Short-Description: start and stop gunicorn/peer server
+# Description: The gunicorn/peer server is an application server with the peer application
+### END INIT INFO
+
+# Path definitions
+prog='docker_pyff_batch'
+#?PIDFILE='/var/run/gunicorn.pid'
+RETVAL=0
+
+start() {
+        echo -n $"Starting $prog: "
+        /opt/pyff_batch/docker_run.sh
+        echo
+        return $RETVAL
+}
+
+stop() {
+    if ${sudo} docker ps | awk '{print $NF}' | grep -qx ${name}; then
+        echo "stopping docker container $name"
+        read foo
+        ${sudo} docker stop ${name}
+        ${sudo} docker kill ${name}
+    else
+        echo "${prog} is not running"
+    fi
+}
+
+# See how we were called.
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  restart)
+        stop
+        start
+        ;;
+  *)
+        echo $"Usage: $prog {start|stop|restart|help}"
+        RETVAL=2
+esac
+
+exit $RETVAL
 
