@@ -17,13 +17,13 @@ RETVAL=0
 
 start() {
         echo -n $"Starting $prog: "
-        /opt/pyff_batch/docker_run.sh
+        /opt/pyff_batch/docker_run.sh -d
         echo
         return 0
 }
 
 stop() {
-    if ${sudo} docker ps | awk '{print $NF}' | grep -qx ${name}; then
+    if ${sudo} docker ps | awk '{print $NF}' | grep -qx pyff_batch; then
         echo "stopping ${prog}"
         read foo
         /opt/pyff_batch/docker_stop.sh
