@@ -1,35 +1,33 @@
 #!/bin/bash
 #
-# gunicorn/peer        Startup script for the gunicorn server with the peer application
+# pyff_batch        Startup script for the pyff docker container with the md aggregator
 # chkconfig: 345 84 16
-# description: seafile server
+# description: pyff SAML Metadata Aggregator
 #
 ### BEGIN INIT INFO
 # Provides: gunicorn/peer
 # Required-Start: $local_fs $remote_fs $network $named
 # Required-Stop: $local_fs $remote_fs $network
-# Short-Description: start and stop gunicorn/peer server
-# Description: The gunicorn/peer server is an application server with the peer application
+# Short-Description: start and stop docker container for pyff batch
 ### END INIT INFO
 
 # Path definitions
 prog='docker_pyff_batch'
-#?PIDFILE='/var/run/gunicorn.pid'
 RETVAL=0
 
 start() {
         echo -n $"Starting $prog: "
         /opt/pyff_batch/docker_run.sh
         echo
-        return $RETVAL
+        return 0
 }
 
 stop() {
     if ${sudo} docker ps | awk '{print $NF}' | grep -qx ${name}; then
-        echo "stopping docker container $name"
+        echo "stopping ${prog}"
         read foo
-        ${sudo} docker stop ${name}
-        ${sudo} docker kill ${name}
+        /opt/pyff_batch/docker_stop.sh
+        # ${sudo} docker kill ${name}  # should not be necessary
     else
         echo "${prog} is not running"
     fi
