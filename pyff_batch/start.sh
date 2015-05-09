@@ -3,7 +3,7 @@
 
 
 # invoke pyff every 10 minutes
-exec="/usr/pyff/bin/pyff --logfile=$LOGFILE --loglevel=$LOGLEVEL $PIPELINE > /dev/null 2>&1"
+exec="/usr/local/bin/pyff --logfile=$LOGFILE --loglevel=$LOGLEVEL $PIPELINE > /dev/null 2>&1"
 echo "*/$PERIOD * * * * root $exec" > /etc/crontab
 
 if [ -z "${LOGFILE}" ]; then
