@@ -11,4 +11,3 @@ fi
 
 
 ${sudo} docker stop ${container_name}
-$sudo docker rm ${container_name} > /dev/null 2> /dev/null

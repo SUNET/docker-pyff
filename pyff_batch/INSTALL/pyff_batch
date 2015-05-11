@@ -16,18 +16,28 @@ prog='docker_pyff_batch'
 RETVAL=0
 
 start() {
-        echo -n $"Starting $prog: "
-        /opt/pyff_batch/docker_run.sh -d
-        echo
+        echo -n "Starting $prog: "
+        if service docker status |grep -qv 'is running'; then
+            waittime=5
+            echo -n "(waiting ${waittime}s for docker daemon to complete startup)"
+            sleep ${waittime}
+        fi
+        if service docker status |grep -qv 'is running'; then
+            echo
+            echo "docker not running - cannot start container"
+        else
+            /opt/pyff_batch/docker_run.sh -d
+            echo
+        fi
         return 0
 }
 
 stop() {
     if ${sudo} docker ps | awk '{print $NF}' | grep -qx pyff_batch; then
-        echo "stopping ${prog}"
-        read foo
+        echo -n "stopping ${prog}"
         /opt/pyff_batch/docker_stop.sh
         # ${sudo} docker kill ${name}  # should not be necessary
+        echo
     else
         echo "${prog} is not running"
     fi

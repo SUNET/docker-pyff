@@ -77,6 +77,10 @@ if [ -z "$PERIOD" ]; then
 fi
 
 
+if docker ps -a |grep -q 'pyff_batch\s*$'; then
+    ${sudo} docker rm ${container_name}  # needed for batch mode
+fi
+
 # To debug your container:
 #DOCKERARGS="--entrypoint /bin/bash" bash -x ./run.sh
 
