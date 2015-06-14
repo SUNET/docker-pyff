@@ -6,7 +6,7 @@ fi
 
 mkdir -p ${DATADIR} && cd ${DATADIR}
 
-. /opt/pyff/bin/activate
+. $VENV/bin/activate
 
 if [ -z "${LOGLEVEL}" ]; then
    export LOGLEVEL="INFO"

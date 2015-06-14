@@ -1,5 +1,6 @@
 FROM ubuntu
-MAINTAINER Leif Johansson <leifj@sunet.se>
+MAINTAINER Leif Johansson <leifj@mnt.se>
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 RUN apt-get update
 RUN apt-get install -y git-core libyaml-dev python-dev build-essential libxml2-dev libxslt-dev libz-dev python-virtualenv
 RUN virtualenv /usr/pyff
