@@ -7,7 +7,7 @@ RUN virtualenv /usr/pyff
 ADD invenv.sh /invenv.sh
 RUN chmod a+x /invenv.sh
 RUN env VENV=/usr/pyff /invenv.sh pip install pykcs11 
-RUN env VENV=/usr/pyff /invenv.sh pip install --upgrade git+git://github.com/leifj/pyFF.git#egg=pyFF
+RUN env VENV=/usr/pyff /invenv.sh pip install --upgrade git+git://github.com/leifj/pyFF.git@multi-id#egg=pyFF
 EXPOSE 8080
 ADD start.sh /start.sh
 ADD mdx.fd /mdx.fd
