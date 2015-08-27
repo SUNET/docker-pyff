@@ -16,6 +16,10 @@ if [ -z "${PIPELINE}" ]; then
    export PIPELINE="mdx.fd"
 fi
 
+if [ -z "${PORT}" ]; then
+   export PORT="8080"
+fi
+
 if [ ! -f "${PIPELINE}" ]; then
    cp /mdx.fd "${PIPELINE}"
    openssl genrsa 4096 > default.key
@@ -24,4 +28,10 @@ fi
 
 mkdir -p /var/run
 
-pyffd -f --loglevel=${LOGLEVEL} -H 0.0.0.0 -P 8080 -p /var/run/pyffd.pid --dir=${DATADIR} -C ${EXTRA_ARGS} ${PIPELINE}
+DEFAULT_COMMAND="pyffd -f --loglevel=${LOGLEVEL} -H 0.0.0.0 -P ${PORT} -p /var/run/pyffd.pid --dir=${DATADIR} -C ${EXTRA_ARGS} ${PIPELINE}"
+
+if [ $# -gt 0 ]; then
+   "$*"
+else
+   "${DEFAULT_COMMAND}"
+fi
