@@ -1,0 +1,33 @@
+FROM centos:centos7
+MAINTAINER r2h2 <rhoerbe@hoerbe.at>
+
+# -> https://github.com/CentOS/sig-cloud-instance-images/issues/22
+ENV container docker
+RUN yum -y swap -- remove systemd-container systemd-container-libs -- install systemd systemd-libs
+
+RUN yum -y update
+RUN yum -y groupinstall "Development Tools" --setopt=group_package_types=mandatory,default,optional
+RUN yum -y groups install "GNOME Desktop"
+RUN yum -y install java-1.8.0-openjdk-devel.x86_64
+RUN yum -y install epel-release
+RUN yum -y install python34-devel
+ADD get-pip.py get-pip.py
+RUN python3.4 get-pip.py
+
+# do stuff from PVZD/PolicyManager/requirements.txt step by step
+RUN yum -y install libffi-devel
+RUN pip install cffi
+
+RUN yum -y install openssl-devel
+RUN pip install pyOpenSSL
+
+RUN pip install gitdb GitPython pytz requests simplejson
+
+RUN pip install cython
+RUN git clone -b python-34 https://github.com/haricot/pyjnius.git
+ENV JAVA_HOME /etc/alternatives/java_sdk_1.8.0
+ENV JDK_HOME /etc/alternatives/java_sdk_1.8.0
+ENV JRE_HOME /etc/alternatives/java_sdk_1.8.0/jre
+RUN cd pyjnius && python3.4 setup.py install
+RUN pip install future
+RUN pip freeze

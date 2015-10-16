@@ -10,8 +10,10 @@ chkconfig --add docker
 service docker start
 # get and build docker image
 cd /usr/local/src   # location to keep git upstream link to produces updated images
-git clone https://github.com/rhoerbe/docker-pyff.git
-cd docker-pyff/pyff_batch
+git clone https://github.com/rhoerbe/docker-pvzd.git
+cd docker-pvzd/
+git clone https://github.com/rhoerbe/PVZD.git # first time
+cd PVZD && git pull && cd .. # already cloned
 ./docker_build.sh
 mkdir /opt/pyff_batch  # location with local configuration, not to be overwritten by git pull
 cp -pr docker_run.sh image_name.sh opt /opt/pyff_batch # copy startup & default config
