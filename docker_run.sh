@@ -13,20 +13,27 @@ cat << EOF
 usage: $0 options
 
 OPTIONS
-    -h  Show this message
     -c  Delete all files in log dir and exit
+    -d  Run as daemon
+    -v  Show data volume mount paths
+    -h  Show this message
 
 EOF
 exit 0
 }
 
-while getopts "c:h:v" OPTION
+detachmode='--detch=false --rm=true'  # run container in foreground and remove it on exit
+
+while getopts "cdhv" OPTION
 do
         case $OPTION in
                 c)
                         rm -f ./${volume}/log/*
                         echo "Deleted /${volume}/log directory."
                         exit 0
+                        ;;
+                d)
+                        detachmode='--detach=true --rm=false'
                         ;;
                 v)
                         echo "mounting data volume (host:container): ${dir}/${volume}:/${volume}"
@@ -52,10 +59,9 @@ if [ $(id -u) -ne 0 ]; then
     sudo="sudo"
 fi
 
-if ${sudo} docker ps | awk '{print $NF}' | grep -qx ${name}; then
+if ${sudo} docker ps | awk '{print $NF}' | grep -qx ${container_name}; then
     echo "$0: Docker container with name $name already running. Press enter to restart it, or ctrl+c to abort."
-    read foo
-    ${sudo} docker kill ${name}
+    exit 0
 fi
 $sudo docker rm ${name} > /dev/null 2> /dev/null
 
@@ -71,10 +77,15 @@ if [ -z "$PERIOD" ]; then
 fi
 
 
+if docker ps -a |grep -q 'pyff_batch\s*$'; then
+    ${sudo} docker rm ${container_name}  # needed for batch mode
+fi
+
 # To debug your container:
 #DOCKERARGS="--entrypoint /bin/bash" bash -x ./run.sh
 
 ${sudo} docker run --rm=true \
+    ${detachmode} \
     --env="LOGFILE=$LOGFILE" \
     --env="LOGLEVEL=$LOGLEVEL" \
     --env="PERIOD=$PERIOD" \
