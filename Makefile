@@ -2,7 +2,7 @@ VERSION=latest
 NAME=pyff
 DOCKERFILE=Dockerfile
 
-all: build sunet
+all: build nightly
 build:
 	docker build -f $(DOCKERFILE) --no-cache=true -t $(NAME):$(VERSION) .
 buildcache:
