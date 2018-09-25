@@ -16,7 +16,7 @@ ADD install-pykcs11.sh /install-pykcs11.sh
 RUN chmod a+x /install-pykcs11.sh
 RUN env VENV=/usr/pyff /invenv.sh pip install setuptools
 RUN env VENV=/usr/pyff /invenv.sh easy_install --upgrade git+git://github.com/leifj/pyXMLSecurity.git@pyff-eidas#egg=pyXMLSecurity
-RUN env VENV=/usr/pyff /invenv.sh easy_install --upgrade git+git://github.com/IdentityPython/pyFF.git#egg=pyFF
+RUN env VENV=/usr/pyff /invenv.sh easy_install --upgrade git+git://github.com/IdentityPython/pyFF.git@ra21-l2#egg=pyFF
 RUN env VENV=/usr/pyff /invenv.sh /install-pykcs11.sh
 EXPOSE 8080
 ADD localconfig.py /usr/pyff/lib/python2.7/localconfig.py
