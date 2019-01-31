@@ -9,12 +9,10 @@ RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
-ADD install-pykcs11.sh /install-pykcs11.sh
-RUN chmod a+x /install-pykcs11.sh
 RUN pip3 install setuptools
 RUN pip3 install --upgrade pip
+RUN pip3 install pykcs11
 RUN pip3 install git+git://github.com/IdentityPython/pyFF.git#egg=pyFF
-RUN /install-pykcs11.sh
 EXPOSE 8080
 ADD start.sh /start.sh
 ADD mdx.fd /mdx.fd
