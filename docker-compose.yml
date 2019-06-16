@@ -1,0 +1,15 @@
+version: "3"
+services:
+   mdq-browser:
+      image: docker.sunet.se/mdq-browser:${MDQ_BROWSER_VERSION:-latest}
+      container_name: mdq_browser
+      ports:
+         - "80:80"
+      environment:
+         - MDQ_HOST=pyff
+         - MDQ_PORT=80
+         - PYFF_APIS=true
+   pyff:
+      build: .
+      image: docker.sunet.se/pyff:${PYFF_VERSION:-api}
+      container_name: pyff-api
