@@ -26,7 +26,7 @@ fi
 
 mkdir -p /var/run
 
-DEFAULT_COMMAND="pyffd -f --loglevel=${LOGLEVEL} -H 0.0.0.0 -P ${PORT} -p /var/run/pyffd.pid --dir=${DATADIR} -C ${EXTRA_ARGS} ${PIPELINE}"
+DEFAULT_COMMAND="gunicorn --bind 0.0.0.0:${PORT} --threads 10 --env PYFF_PIPELINE=${PIPELINE} --log-level ${LOGLEVEL} --timeout=600 ${EXTRA_ARGS} pyff.wsgi:app"
 
 if [ $# -gt 0 ]; then
    exec $*
