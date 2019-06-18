@@ -1,17 +1,29 @@
-VERSION=1.0.0
+VERSION:=1.0.1
+IMAGE_TAG:=$(VERSION)
 NAME=pyff
-all: build sunet
-build:
-	docker build --no-cache=true -t $(NAME):$(VERSION) .
+NOCACHE:=true
+REGISTRY:=docker.sunet.se
+PACKAGE:=pyFF==$(VERSION)
 
-update:
-	docker build --no-cache=false -t $(NAME):$(VERSION) .
+.PHONY: Dockerfile
 
-sunet:
-	docker tag $(NAME):$(VERSION) docker.sunet.se/$(NAME):$(VERSION)
-	docker push docker.sunet.se/$(NAME):$(VERSION)
+all: build push
 
-nightly:
-	$(MAKE) VERSION=nightly build
-	docker tag $(NAME):nightly leifj/$(NAME):nightly
-	docker push leifj/$(NAME):nightly
+clean:
+	rm -f Dockerfile
+
+Dockerfile: Dockerfile.in
+	env PACKAGE=$(PACKAGE) VERSION=$(VERSION) IMAGE_TAG=$(IMAGE_TAG) EXTRA_PACKAGES=$(EXTRA_PACKAGES) envsubst < $< > $@
+
+build: Dockerfile
+	docker build --no-cache=$(NOCACHE) -t $(NAME):$(IMAGE_TAG) .
+
+push:
+	docker tag $(NAME):$(IMAGE_TAG) $(REGISTRY)/$(NAME):$(IMAGE_TAG)
+	docker push $(REGISTRY)/$(NAME):$(IMAGE_TAG)
+
+eidas: 
+	$(MAKE) NOCACHE=false PAKAGE=$(PACKAGE) IMAGE_TAG=$(VERSION)-eidas EXTRA_PACKAGES=git+git://github.com/IdentityPython/pyXMLSecurity.git@pyff-eidas#egg=pyXMLSecurity build push
+
+dev:
+	$(MAKE) NOCACHE=true IMAGE_TAG=dev PACKAGE=git+git://github.com/IdentityPython/pyFF.git#egg=pyFF build
