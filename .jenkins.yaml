@@ -4,8 +4,6 @@ builders:
     - script
 script:
     - make
-    - make eidas
-    - make dev
 upstream:
     - pyFF
     - pyXMLSecurity
