@@ -3,7 +3,7 @@ triggers:
 builders:
     - script
 script:
-    - make
+    - make dist
 upstream:
     - pyFF
     - pyXMLSecurity

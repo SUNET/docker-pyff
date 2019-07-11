@@ -9,7 +9,9 @@ PACKAGE:=pyFF==$(VERSION)
 
 .PHONY: Dockerfile
 
-all: versions dev
+all: std
+
+dist: versions dev
 
 versions:
 	@for ver in $(VERSIONS); do for target in $(TARGETS); do $(MAKE) VERSION=$$ver $$target push;  done; done
