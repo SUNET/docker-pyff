@@ -13,7 +13,7 @@ PACKAGE:=pyFF==$(VERSION)
 
 all: std
 
-dist: versions stable latest dev
+dist: versions stable dev
 
 versions:
 	@for ver in $(VERSIONS); do for target in $(TARGETS); do $(MAKE) VERSION=$$ver $$target push;  done; done
