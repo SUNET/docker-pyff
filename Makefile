@@ -1,13 +1,14 @@
 VERSION:=1.0.1
-VERSIONS:=1.0.1 1.1.0 1.1.1 1.1.2
+VERSIONS:=1.0.1 1.1.2 1.1.3
 STABLE=1.0.1
-LATEST=1.1.2
+LATEST=1.1.3
 TARGETS:=std eidas
 IMAGE_TAG:=$(VERSION)
 NAME=pyff
 NOCACHE:=true
 REGISTRY:=docker.sunet.se
 PACKAGE:=pyFF==$(VERSION)
+ENTRYPOINT=pyffd
 
 .PHONY: Dockerfile
 
@@ -16,13 +17,14 @@ all: std
 dist: versions stable testing testing-eidas
 
 versions:
-	@for ver in $(VERSIONS); do for target in $(TARGETS); do $(MAKE) VERSION=$$ver $$target push;  done; done
+	@for ver in $(VERSIONS); do for target in $(TARGETS); do $(MAKE) VERSION=$$ver ENTRYPOINT=pyffd $$target push;  done; done
+	@for ver in $(VERSIONS); do for target in $(TARGETS); do $(MAKE) VERSION=${$ver}-api ENTRYPOINT=api $$target push;  done; done	
 
 clean:
 	rm -f Dockerfile
 
 Dockerfile: Dockerfile.in
-	env PACKAGE=$(PACKAGE) VERSION=$(VERSION) IMAGE_TAG=$(IMAGE_TAG) EXTRA_PACKAGES=$(EXTRA_PACKAGES) envsubst < $< > $@
+	env PACKAGE=$(PACKAGE) VERSION=$(VERSION) IMAGE_TAG=$(IMAGE_TAG) ENTRYPOINT=$(ENTRYPOINT) EXTRA_PACKAGES=$(EXTRA_PACKAGES) envsubst < $< > $@
 
 stable:
 	docker tag pyff:$(STABLE) $(REGISTRY)/pyff:stable
@@ -46,6 +48,8 @@ eidas: Dockerfile
 
 testing: 
 	$(MAKE) VERSION=testing IMAGE_TAG=testing PACKAGE=git+git://github.com/IdentityPython/pyFF.git#egg=pyFF build push
+	$(MAKE) VERSION=testing-api IMAGE_TAG=testing-api ENTRYPOINT=api PACKAGE=git+git://github.com/IdentityPython/pyFF.git#egg=pyFF build push
 
 testing-eidas:
 	$(MAKE) VERSION=testing IMAGE_TAG=eidas-testing PACKAGE=git+git://github.com/IdentityPython/pyFF.git#egg=pyFF EXTRA_PACKAGES=git+git://github.com/IdentityPython/pyXMLSecurity.git@pyff-eidas#egg=pyXMLSecurity build push
+	$(MAKE) VERSION=testing IMAGE_TAG=eidas-testing ENTRYPOINT=api PACKAGE=git+git://github.com/IdentityPython/pyFF.git#egg=pyFF EXTRA_PACKAGES=git+git://github.com/IdentityPython/pyXMLSecurity.git@pyff-eidas#egg=pyXMLSecurity build push
