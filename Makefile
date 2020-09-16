@@ -1,9 +1,9 @@
 VERSION:=1.0.1
-VERSIONS:=1.0.1 1.1.2 1.1.3
+VERSIONS:=1.0.1 1.1.2 1.1.4
 STABLE=1.0.1
 LATEST=1.1.3
 TARGETS:=std eidas
-IMAGE_TAG:=$(VERSION)
+IMAGE_TAG:=$(VERSION)$(SUBTAG)
 NAME=pyff
 NOCACHE:=true
 REGISTRY:=docker.sunet.se
@@ -17,8 +17,8 @@ all: std
 dist: versions stable testing testing-eidas
 
 versions:
-	@for ver in $(VERSIONS); do for target in $(TARGETS); do $(MAKE) VERSION=$$ver ENTRYPOINT=pyffd $$target push;  done; done
-	@for ver in $(VERSIONS); do for target in $(TARGETS); do $(MAKE) VERSION=${$ver}-api ENTRYPOINT=api $$target push;  done; done	
+	@for ver in $(VERSIONS); do for target in $(TARGETS); do $(MAKE) VERSION=$$ver SUBTAG="" ENTRYPOINT=pyffd $$target push;  done; done
+	@for ver in $(VERSIONS); do for target in $(TARGETS); do $(MAKE) VERSION=$$ver SUBTAG="-api" ENTRYPOINT=api $$target push;  done; done	
 
 clean:
 	rm -f Dockerfile
