@@ -1,7 +1,7 @@
 VERSION:=1.0.1
 VERSIONS:=1.0.1 1.1.2 1.1.4
 STABLE=1.0.1
-LATEST=1.1.3
+LATEST=1.1.4
 TARGETS:=std eidas
 IMAGE_TAG:=$(VERSION)$(SUBTAG)
 NAME=pyff
@@ -44,7 +44,7 @@ push:
 	docker push $(REGISTRY)/$(NAME):$(IMAGE_TAG)
 
 eidas: Dockerfile
-	$(MAKE) PAKAGE=$(PACKAGE) IMAGE_TAG=$(VERSION)-eidas EXTRA_PACKAGES=git+git://github.com/IdentityPython/pyXMLSecurity.git@pyff-eidas#egg=pyXMLSecurity build push
+	$(MAKE) PAKAGE=$(PACKAGE) IMAGE_TAG=$(VERSION)-eidas ENTRYPOINT=$(ENTRYPOINT) EXTRA_PACKAGES=git+git://github.com/IdentityPython/pyXMLSecurity.git@pyff-eidas#egg=pyXMLSecurity build push
 
 testing: 
 	$(MAKE) VERSION=testing IMAGE_TAG=testing PACKAGE=git+git://github.com/IdentityPython/pyFF.git#egg=pyFF build push

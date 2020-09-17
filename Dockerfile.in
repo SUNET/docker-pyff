@@ -17,8 +17,8 @@ RUN pip3 install --upgrade pipdeptree pykcs11 ${EXTRA_PACKAGES}
 RUN pipdeptree
 EXPOSE 8080
 ADD ${ENTRYPOINT}.sh /${ENTRYPOINT}.sh
-ADD debug.ini /
-ADD warn.ini /
+ADD debug.ini /debug.ini
+ADD warn.ini /warn.ini
 ADD mdx.fd /mdx.fd
 RUN chmod a+x /${ENTRYPOINT}.sh
 ENTRYPOINT ["/${ENTRYPOINT}.sh"]
