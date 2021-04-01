@@ -5,7 +5,7 @@
 - when request:
     - select
     - pipe:
-        - when accept application/xml:
+        - when accept application/samlmetadata+xml application/xml:
              - xslt:
                  stylesheet: tidy.xsl
              - first
@@ -18,7 +18,6 @@
              - emit application/xml
              - break
         - when accept application/json:
-             - xslt:
-                 stylesheet: discojson.xsl
+             - discojson
              - emit application/json:
              - break
