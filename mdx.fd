@@ -10,8 +10,8 @@
                  stylesheet: tidy.xsl
              - first
              - finalize:
-                cacheDuration: PT10D
-                validUntil: PT5H
+                 cacheDuration: PT5H
+                 validUntil: P10D
              - sign:
                  key: default.key
                  cert: default.crt
