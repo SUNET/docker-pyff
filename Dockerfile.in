@@ -1,20 +1,16 @@
-FROM debian:stable
+FROM ${BASE_IMAGE} 
 MAINTAINER Leif Johansson <leifj@sunet.se>
 ENV ENV LOGLEVEL INFO
 ENV PIPELINE mdx.fd
 ENV DATADIR /opt/pyff
 ENV PUBLIC_URL "http://localhost:8080"
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-RUN apt-get -q update && apt-get -y upgrade && apt-get install -y locales python3 python3-venv python3-pip git-core swig libyaml-dev libyaml-dev python3-dev build-essential libxml2-dev libxslt-dev libz-dev wget
+RUN apt-get -q update && apt-get -y upgrade && apt-get install -y locales python3 python3-venv python3-pip python3-setuptools git-core swig libyaml-dev libyaml-dev python3-dev build-essential libxml2-dev libxslt-dev libz-dev wget
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
-RUN pip3 install setuptools
-RUN pip3 install --upgrade pip
-RUN pip3 install ${PACKAGE}
-RUN pip3 install --upgrade pipdeptree pykcs11 ${EXTRA_PACKAGES}
-RUN pipdeptree
+RUN python3 -m venv ${DATADIR}/.venv && . ${DATADIR}/.venv/bin/activate && pip3 install ${PACKAGE} && pip3 install --upgrade pipdeptree pykcs11 ${EXTRA_PACKAGES} && pipdeptree
 EXPOSE 8080
 ADD ${ENTRYPOINT}.sh /${ENTRYPOINT}.sh
 ADD debug.ini /debug.ini

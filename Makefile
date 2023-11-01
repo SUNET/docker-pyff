@@ -1,21 +1,24 @@
 VERSION:=1.1.5
-VERSIONS:=1.0.1 1.1.2 1.1.4 1.1.5 2.0.0
+VERSIONS:=1.1.5 2.0.0 2.1.0
 STABLE=1.1.5
-LATEST=2.0.0
-TARGETS:=std eidas
+LATEST=2.1.0
+TARGETS:=std
 VARIANT:=
 IMAGE_TAG:=$(VERSION)$(VARIANT)$(SUBTAG)
 NAME=pyff
-NOCACHE:=true
+NOCACHE:=false
 REGISTRY:=docker.sunet.se
 PACKAGE:=pyFF==$(VERSION)
 ENTRYPOINT=pyffd
+BASE_IMAGE=debian:stable
+
+-include config/$(VERSION).mk
 
 .PHONY: Dockerfile
 
 all: std
 
-dist: versions stable testing testing-eidas
+dist: versions stable testing
 
 versions:
 	@for ver in $(VERSIONS); do for target in $(TARGETS); do $(MAKE) VERSION=$$ver SUBTAG="" ENTRYPOINT=pyffd $$target push;  done; done
@@ -24,7 +27,7 @@ clean:
 	rm -f Dockerfile
 
 Dockerfile: Dockerfile.in
-	env PACKAGE=$(PACKAGE) VERSION=$(VERSION) IMAGE_TAG=$(IMAGE_TAG) ENTRYPOINT=$(ENTRYPOINT) EXTRA_PACKAGES=$(EXTRA_PACKAGES) envsubst < $< > $@
+	env PACKAGE=$(PACKAGE) BASE_IMAGE=$(BASE_IMAGE) VERSION=$(VERSION) IMAGE_TAG=$(IMAGE_TAG) ENTRYPOINT=$(ENTRYPOINT) EXTRA_PACKAGES=$(EXTRA_PACKAGES) envsubst < $< > $@
 
 stable:
 	docker tag pyff:$(STABLE) $(REGISTRY)/pyff:stable
@@ -44,10 +47,10 @@ push:
 	docker push $(REGISTRY)/$(NAME):$(IMAGE_TAG)
 
 eidas: Dockerfile
-	$(MAKE) PAKAGE=$(PACKAGE) VARIANT="-eidas" ENTRYPOINT=$(ENTRYPOINT) EXTRA_PACKAGES=git+git://github.com/IdentityPython/pyXMLSecurity.git@pyff-eidas#egg=pyXMLSecurity build push
+	$(MAKE) PAKAGE=$(PACKAGE) VARIANT="-eidas" ENTRYPOINT=$(ENTRYPOINT) EXTRA_PACKAGES=git+http://github.com/IdentityPython/pyXMLSecurity.git@pyff-eidas#egg=pyXMLSecurity build push
 
 testing: 
-	$(MAKE) VERSION=testing IMAGE_TAG=testing PACKAGE=git+git://github.com/IdentityPython/pyFF.git#egg=pyFF build push
+	$(MAKE) VERSION=testing IMAGE_TAG=testing PACKAGE=git+http://github.com/IdentityPython/pyFF.git#egg=pyFF build push
 
 testing-eidas:
-	$(MAKE) VERSION=testing IMAGE_TAG=eidas-testing PACKAGE=git+git://github.com/IdentityPython/pyFF.git#egg=pyFF EXTRA_PACKAGES=git+git://github.com/IdentityPython/pyXMLSecurity.git@pyff-eidas#egg=pyXMLSecurity build push
+	$(MAKE) VERSION=testing IMAGE_TAG=eidas-testing PACKAGE=git+http://github.com/IdentityPython/pyFF.git#egg=pyFF EXTRA_PACKAGES=git+http://github.com/IdentityPython/pyXMLSecurity.git@pyff-eidas#egg=pyXMLSecurity build push
