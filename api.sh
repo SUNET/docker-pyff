@@ -4,6 +4,8 @@ if [ -z "${DATADIR}" ]; then
    export DATADIR="/tmp/pyff"
 fi
 
+. ${VENV}/bin/activate
+
 mkdir -p ${DATADIR} && cd ${DATADIR}
 
 if [ -z "${LOGLEVEL}" ]; then

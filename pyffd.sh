@@ -6,6 +6,8 @@ fi
 
 mkdir -p ${DATADIR} && cd ${DATADIR}
 
+. ${VENV}/bin/activate
+
 if [ -z "${LOGLEVEL}" ]; then
    export LOGLEVEL="INFO"
 fi
