@@ -1,1 +1,1 @@
-BASE_IMAGE=debian:sid
+BASE_IMAGE=debian:bookworm
