@@ -1,5 +1,4 @@
 FROM ${BASE_IMAGE}
-MAINTAINER Leif Johansson <leifj@sunet.se>
 ENV ENV LOGLEVEL INFO
 ENV PIPELINE mdx.fd
 ENV DATADIR /opt/pyff
