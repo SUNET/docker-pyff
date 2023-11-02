@@ -1,4 +1,4 @@
-FROM ${BASE_IMAGE} 
+FROM ${BASE_IMAGE}
 MAINTAINER Leif Johansson <leifj@sunet.se>
 ENV ENV LOGLEVEL INFO
 ENV PIPELINE mdx.fd
