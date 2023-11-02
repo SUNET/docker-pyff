@@ -28,8 +28,6 @@ fi
 
 mkdir -p /var/run
 
-. ${DATADIR}/.venv/bin/activate
-
 CMD="pyffd -f --frequency=${UPDATE_FREQUENCY:-300} --loglevel=${LOGLEVEL} -H 0.0.0.0 -P ${PORT} -p /var/run/pyffd.pid --dir=${DATADIR} -C ${EXTRA_ARGS} ${PIPELINE}"
 
 if [ $# -gt 0 ]; then
