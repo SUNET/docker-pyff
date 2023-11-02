@@ -50,7 +50,7 @@ push:
 eidas: Dockerfile
 	$(MAKE) PAKAGE=$(PACKAGE) VARIANT="-eidas" ENTRYPOINT=$(ENTRYPOINT) EXTRA_PACKAGES=git+http://github.com/IdentityPython/pyXMLSecurity.git@pyff-eidas#egg=pyXMLSecurity build push
 
-testing: 
+testing:
 	$(MAKE) VERSION=testing IMAGE_TAG=testing PACKAGE=git+http://github.com/IdentityPython/pyFF.git#egg=pyFF build push
 
 testing-eidas:
