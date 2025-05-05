@@ -1,4 +1,4 @@
-VERSION:=1.1.5
+VERSION=$(LATEST)
 VERSIONS:=1.1.5 2.0.0 2.1.2 2.1.3
 STABLE=1.1.5
 LATEST=2.1.3
@@ -19,7 +19,7 @@ BASE_IMAGE=debian:stable
 
 all: std
 
-dist: versions stable testing
+dist: versions stable testing latest
 
 versions:
 	@for ver in $(VERSIONS); do for target in $(TARGETS); do $(MAKE) VERSION=$$ver SUBTAG="" ENTRYPOINT=pyffd $$target push;  done; done
