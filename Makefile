@@ -7,7 +7,7 @@ VARIANT:=
 IMAGE_TAG:=$(VERSION)$(VARIANT)$(SUBTAG)
 VENV=/venv
 NAME=pyff
-NOCACHE:=false
+NOCACHE:=true
 REGISTRY:=docker.sunet.se
 PACKAGE:=pyFF==$(VERSION)
 ENTRYPOINT=pyffd
