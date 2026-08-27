@@ -1,1 +1,1 @@
-BASE_IMAGE=debian:bookworm
+BASE_IMAGE=debian:trixie-slim
